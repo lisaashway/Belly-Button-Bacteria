@@ -24,12 +24,14 @@ d3.json(url).then(function(samples) {
 
         //Creating Panel Body
         var panelBody = d3.select(".panel-body");
-        var panelList = panelBody.append("ul");
+        var panelTable = panelBody.append("table");
+        var tbody = panelTable.append("tbody");
         var entries = d3.entries(matchingDemo);
 
         entries.forEach(entry => {
-            var panelListElement = panelList.append("li");
-            panelListElement.text(`${entry.key}:${entry.value}`)
+            var row = tbody.append("tr");
+            var listElement = row.append("td");
+            listElement.text(`${entry.key}: ${entry.value}`);
         });
 
         //Getting Test Subject Sample Values
@@ -90,6 +92,22 @@ d3.json(url).then(function(samples) {
           
           Plotly.newPlot('bubble', data, layout);
 
+
+        //Creating Gauge Chart
+        console.log(matchingDemo.wfreq);
+        var data = [{
+            value: matchingDemo.wfreq,
+            domain: { x: [0, 1], y: [0, 1] },
+            title: { text: "Wash Frequency" },
+            type: "indicator",
+            mode: "gauge+number",
+            gauge: {
+                axis: { range: [null, 9] }
+            }   
+        }];
+        
+        var layout = { width: 600, height: 500, margin: { t: 0, b: 0 } };
+        Plotly.newPlot('gauge', data, layout);
         
         //When Dropdown Changes
         var dropdown = d3.select('#selDataset');
@@ -100,23 +118,21 @@ d3.json(url).then(function(samples) {
             //Getting Test Subject Demographics
             var jsonDemo = samples.metadata;
             var matchingDemo = jsonDemo.find(d => d.id == selectedID);
-            console.log(matchingDemo);
 
             //Updating Panel Body
             var panelBody = d3.select(".panel-body");
             //Deleting Existing 
-            panelBody.selectAll("ul").remove();
+            panelBody.selectAll("table").remove();
             //Adding New List
-            var panelList = panelBody.append("ul");
+            var panelTable = panelBody.append("table");
+            var tbody = panelTable.append("tbody");
             var entries = d3.entries(matchingDemo);
-            console.log(entries);
-
+    
             entries.forEach(entry => {
-                var panelListElement = panelList.append("li");
-                panelListElement.text(`${entry.key}:${entry.value}`)
+                var row = tbody.append("tr");
+                var listElement = row.append("td");
+                listElement.text(`${entry.key}:  ${entry.value}`);
             });
-            
-
 
             //Getting Test Subject Sample Values
             var jsonSample = samples.samples;
@@ -138,43 +154,40 @@ d3.json(url).then(function(samples) {
             };
             var topTenIds = getTopTen(sampleAsObjects);
             
-            //Creating Bar Chart
-            var trace1 = {
-                x: topTenIds.map(id => id.sample_values),
-                y: topTenIds.map(id => `OTU: ${id.otu_ids}`),
-                text: topTenIds.map(id => id.otu_labels),
-                type: "bar",
-                orientation: 'h'
+            //Updating Bar Chart
+            var update = {
+                x: [topTenIds.map(id => id.sample_values)],
+                y: [topTenIds.map(id => `OTU: ${id.otu_ids}`)],
+                text: [topTenIds.map(id => id.otu_labels)]
             };
 
-            var data = [trace1];
-            var layout = {
-                title: "Bar Chart",
-                xaxis: {title: "X-axis"},
-                yaxis: {title: "Bars"}
-            };
+            Plotly.restyle('bar', update, [0,1,2]);
 
-            Plotly.newPlot('bar', data, layout);
-
-            //Creating Bubble Chart
-            var trace2 = {
-                x: topTenIds.map(id => id.otu_ids),
-                y: topTenIds.map(id => id.sample_values),
-                mode: 'markers',
-                marker: {
-                    size: topTenIds.map(id => id.sample_values)},
-                text: topTenIds.map(id => id.otu_labels) ,
-                type: "bubble"
-            };
-
-            var data = [trace2];
-            var layout = {
-                title: 'Marker Size',
-                showlegend: false,
-                height: 600
+            //Updating Bubble Chart
+            var update = {
+                x: [topTenIds.map(id => id.otu_ids)],
+                y: [topTenIds.map(id => id.sample_values)],
+                marker: [{
+                    size: topTenIds.map(id => id.sample_values)}],
+                text: [topTenIds.map(id => id.otu_labels)]
             };
             
-            Plotly.newPlot('bubble', data, layout);
+            Plotly.restyle('bubble', update, [0,1,3,4]);
+
+            console.log(matchingDemo.wfreq);
+
+            var update = {
+                value: matchingDemo.wfreq,
+                domain: { x: [0, 1], y: [0, 1] },
+                title: { text: "Wash Frequency" },
+                type: "indicator",
+                mode: "gauge+number",
+                gauge: {
+                    axis: { range: [null, 9] }
+                }   
+            };
+
+            Plotly.restyle('gauge', update);
         });
 });
 
