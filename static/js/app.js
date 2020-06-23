@@ -1,9 +1,6 @@
 
 //Create Pathway to json
-const url = "../samples.json";
-
-//Reading json using d3
-const samples = d3.json(url);
+const url = "/static/samples.json";
 
 //Function that runs after retreiving json
 d3.json(url).then(function(samples) {
