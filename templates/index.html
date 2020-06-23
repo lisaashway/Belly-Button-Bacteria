@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Bellybutton Biodiversity</title>
+  <link rel="stylesheet" href="static/css/bootstrap.min.css">
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="row ">
+      <div class="col-md-12 center jumbotron text-center card border-info">
+        <h1>Belly Button Biodiversity Dashboard</h1>
+        <p>Use the interactive charts below to explore the dataset</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-3">
+        <div class = "card border-info mb-2">
+
+          <div class="card-header text-white bg-info">Test Subject ID No.:</div>
+          <div class = "card-body">
+            <h6 class = "text-muted">Select Below</h6>
+            <select id="selDataset"></select>
+          </div>
+        </div>
+
+        <div class="card border-info mb-2">
+          <div class="card-header text-white bg-info">Demographic Info</div>
+            <div class = "card-body">
+              <div id="sample-metadata" class="card-text"></div>
+           </div> 
+        </div>
+      </div>
+      <div class="col-md-6 center">
+        <div id="bar"></div>
+      </div>
+      <div class="col-md-3">
+        <div id="gauge"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <div id="bubble"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="./static/js/app.js"></script>
+</body>
+
+</html>
